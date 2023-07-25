@@ -5,5 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.Disaster" parent="Base.Theme.Disaster" />
+    <style name="Theme.Disaster" parent="Base.Theme.Disaster">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>
