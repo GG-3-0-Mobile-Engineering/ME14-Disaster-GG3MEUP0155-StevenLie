@@ -2,4 +2,6 @@
     <string name="app_name">Disaster</string>
     <string name="current_location">Current Location</string>
     <string name="disaster_info">Informasi Bencana Terkini</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="enable_dark_mode">Enable dark mode</string>
 </resources>
