@@ -1,5 +1,6 @@
 package com.steven.disaster
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -20,7 +21,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.steven.disaster.databinding.ActivityMainBinding
-
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var currentLocation: Location
@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+        }
+
+        mainBinding.imgBtnSettings.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -4,4 +4,5 @@
     <string name="disaster_info">Informasi Bencana Terkini</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="enable_dark_mode">Enable dark mode</string>
+    <string name="settings">Settings</string>
 </resources>
