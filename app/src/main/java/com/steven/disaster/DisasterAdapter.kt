@@ -30,7 +30,7 @@ class DisasterAdapter : RecyclerView.Adapter<DisasterAdapter.DisasterViewHolder>
                     )
                 tvLocation.text = itemView.context.getString(
                     R.string.location,
-                    disaster?.properties?.tags?.instanceRegionCode
+                    SupportedArea.area[disaster?.properties?.tags?.instanceRegionCode]
                 )
                 tvStatus.text =
                     itemView.context.getString(R.string.status, disaster?.properties?.status)
