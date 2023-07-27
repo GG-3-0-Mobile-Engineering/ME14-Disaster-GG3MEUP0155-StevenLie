@@ -1,5 +1,6 @@
 package com.steven.disaster
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,10 @@ class DisasterAdapter : RecyclerView.Adapter<DisasterAdapter.DisasterViewHolder>
                 if (disaster?.properties?.imageUrl != null) {
                     Glide.with(itemView.context)
                         .load(disaster.properties.imageUrl)
+                        .into(imgDisaster)
+                } else {
+                    Glide.with(itemView.context)
+                        .load(ColorDrawable(itemView.context.getColor(R.color.light_grey)))
                         .into(imgDisaster)
                 }
             }
