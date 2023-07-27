@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var mainBinding: ActivityMainBinding
     private val disasterAdapter = DisasterAdapter()
+    private val listLatLng: MutableList<LatLng> = mutableListOf()
     private var map: GoogleMap? = null
 
     @SuppressLint("NotifyDataSetChanged")
@@ -77,15 +78,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility =
                 if (geometriesItem?.isEmpty() as Boolean) View.VISIBLE else View.GONE
             for (i in geometriesItem.indices) {
-                map?.addMarker(
-                    MarkerOptions()
-                        .position(
-                            LatLng(
-                                geometriesItem[i]?.coordinates?.get(0) as Double,
-                                geometriesItem[i]?.coordinates?.get(1) as Double
-                            )
-                        )
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                listLatLng.add(
+                    LatLng(
+                        geometriesItem[i]?.coordinates?.get(1) as Double,
+                        geometriesItem[i]?.coordinates?.get(0) as Double
+                    )
                 )
             }
         }
@@ -147,12 +144,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         this.map = map
         val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 6.0f))
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 4.0f))
         map.addMarker(
             MarkerOptions()
                 .position(latLng)
-                .title(getString(R.string.current_location))
+                .title(getString(R.string.your_location))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        )
+        )?.showInfoWindow()
+
+        for (latLong in listLatLng) {
+            map.addMarker(
+                MarkerOptions()
+                    .position(latLong)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            )
+        }
     }
 }
