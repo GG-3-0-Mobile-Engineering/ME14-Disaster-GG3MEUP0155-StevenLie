@@ -1,15 +1,21 @@
 package com.steven.disaster
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,13 +35,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var mainBinding: ActivityMainBinding
+    private val disasterAdapter = DisasterAdapter()
+    private var map: GoogleMap? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         supportActionBar?.hide()
         setContentView(mainBinding.root)
+
+        val mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation()
@@ -58,6 +69,35 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainBinding.imgBtnSettings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
+        }
+
+        mainViewModel.geometriesItem.observe(this) { geometriesItem ->
+            disasterAdapter.setDisaster(geometriesItem)
+            disasterAdapter.notifyDataSetChanged()
+            bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility =
+                if (geometriesItem?.isEmpty() as Boolean) View.VISIBLE else View.GONE
+            for (i in geometriesItem.indices) {
+                map?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                geometriesItem[i]?.coordinates?.get(0) as Double,
+                                geometriesItem[i]?.coordinates?.get(1) as Double
+                            )
+                        )
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                )
+            }
+        }
+
+        with(bottomSheetLayout.findViewById<RecyclerView>(R.id.rv_disaster)) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = disasterAdapter
+        }
+
+        mainViewModel.isLoading.observe(this) { isLoading ->
+            bottomSheetLayout.findViewById<ProgressBar>(R.id.progressBar).visibility =
+                if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
@@ -104,9 +144,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap) {
+        this.map = map
         val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f))
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 6.0f))
         map.addMarker(
             MarkerOptions()
                 .position(latLng)

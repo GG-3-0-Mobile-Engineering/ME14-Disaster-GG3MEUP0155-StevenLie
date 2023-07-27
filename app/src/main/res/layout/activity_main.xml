@@ -34,7 +34,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <include layout="@layout/disaster_info_bottom_sheet" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
