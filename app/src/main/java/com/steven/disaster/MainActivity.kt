@@ -26,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.steven.disaster.databinding.ActivityMainBinding
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mainBinding: ActivityMainBinding
     private val disasterAdapter = DisasterAdapter()
     private val listLatLng: MutableList<LatLng> = mutableListOf()
+    private val listMarker: MutableList<Marker?> = mutableListOf()
     private var map: GoogleMap? = null
 
     @SuppressLint("NotifyDataSetChanged")
@@ -87,6 +89,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                 )
             }
+            showMarker()
         }
 
         with(bottomSheetLayout.findViewById<RecyclerView>(R.id.rv_disaster)) {
@@ -205,14 +208,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .position(latLng)
                 .title(getString(R.string.your_location))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        )?.showInfoWindow()
+        )
+        showMarker()
+    }
 
+    private fun showMarker() {
+        clearMarker()
         for (latLong in listLatLng) {
-            map.addMarker(
+            val disasterMarker = map?.addMarker(
                 MarkerOptions()
                     .position(latLong)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             )
+            listMarker.add(disasterMarker)
         }
+    }
+
+    private fun clearMarker() {
+        for (disasterMarker in listMarker) {
+            disasterMarker?.remove()
+        }
+        listMarker.clear()
     }
 }
