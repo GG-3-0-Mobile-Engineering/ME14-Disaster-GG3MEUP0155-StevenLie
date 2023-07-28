@@ -126,7 +126,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     } else {
                         mainViewModel.getGeometriesItemByLocation(listAreaKeys[position])
                     }
-                    mainBinding.spinnerType.setSelection(0)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -149,7 +148,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     } else {
                         mainViewModel.getGeometriesItemByType(DisasterType.type[position].lowercase())
                     }
-                    mainBinding.spinnerArea.setSelection(0)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
