@@ -31,4 +31,8 @@
     <style name="BottomSheetLine">
         <item name="android:background">@android:color/darker_gray</item>
     </style>
+
+    <style name="SpinnerBackground">
+        <item name="android:background">@android:color/black</item>
+    </style>
 </resources>

@@ -1,7 +1,8 @@
 package com.steven.disaster
 
 object SupportedArea {
-    val area = mapOf<String, String>(
+    val area = mapOf(
+        "" to "Select Province",
         "ID-AC" to "Aceh",
         "ID-BA" to "Bali",
         "ID-BB" to "Kep Bangka Belitung",

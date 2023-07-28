@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -96,6 +98,59 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             bottomSheetLayout.findViewById<ProgressBar>(R.id.progressBar).visibility =
                 if (isLoading) View.VISIBLE else View.GONE
         }
+
+        mainViewModel.isFailed.observe(this) { isFailed ->
+            bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility =
+                if (isFailed) View.VISIBLE else View.GONE
+        }
+
+        val listAreaValues: MutableList<String> = SupportedArea.area.values.toMutableList()
+        val listAreaKeys = SupportedArea.area.keys.toList()
+        mainBinding.spinnerArea.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listAreaValues)
+        mainBinding.spinnerArea.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility = View.GONE
+                    listLatLng.clear()
+                    if (position == 0) {
+                        mainViewModel.getGeometriesItem()
+                    } else {
+                        mainViewModel.getGeometriesItemByLocation(listAreaKeys[position])
+                    }
+                    mainBinding.spinnerType.setSelection(0)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+        mainBinding.spinnerType.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, DisasterType.type)
+        mainBinding.spinnerType.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility = View.GONE
+                    listLatLng.clear()
+                    if (position == 0) {
+                        mainViewModel.getGeometriesItem()
+                    } else {
+                        mainViewModel.getGeometriesItemByType(DisasterType.type[position].lowercase())
+                    }
+                    mainBinding.spinnerArea.setSelection(0)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
     }
 
     private fun getCurrentLocation() {
