@@ -7,6 +7,7 @@
         <item name="colorSecondary">@color/green</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+        <item name="bottomSheetDragHandleStyle">@style/BottomSheetLine</item>
     </style>
 
     <style name="Theme.Disaster" parent="Base.Theme.Disaster">
@@ -28,8 +29,8 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
-    <style name="BottomSheetLine">
-        <item name="android:background">@android:color/darker_gray</item>
+    <style name="BottomSheetLine" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="tint">@android:color/white</item>
     </style>
 
     <style name="SpinnerBackground">
