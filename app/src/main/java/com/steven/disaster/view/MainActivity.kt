@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         with(bottomSheetLayout.findViewById<RecyclerView>(R.id.rv_disaster)) {
             layoutManager = LinearLayoutManager(context)
             adapter = disasterAdapter
+            isNestedScrollingEnabled = true
         }
 
         mainViewModel.isLoading.observe(this) { isLoading ->
