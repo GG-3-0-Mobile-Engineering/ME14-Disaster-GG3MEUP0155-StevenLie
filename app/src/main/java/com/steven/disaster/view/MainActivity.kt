@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.chip.Chip
 import com.steven.disaster.viewmodel.MainViewModel
 import com.steven.disaster.R
 import com.steven.disaster.data.SettingPreference
@@ -126,27 +127,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-        mainBinding.spinnerType.adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, DisasterType.type)
-        mainBinding.spinnerType.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    mainBinding.bottomSheet.tvNoData.visibility = View.GONE
-                    listLatLng.clear()
-                    if (position == 0) {
-                        mainViewModel.getGeometriesItem()
-                    } else {
-                        mainViewModel.getGeometriesItemByType(DisasterType.type[position].lowercase())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+        mainBinding.chipGroupDisaster.setOnCheckedStateChangeListener { group, _ ->
+            val selectedId = group.checkedChipId
+            mainBinding.bottomSheet.tvNoData.visibility = View.GONE
+            listLatLng.clear()
+            if (selectedId == View.NO_ID) {
+                mainViewModel.getGeometriesItem()
+            } else {
+                val selectedDisaster =
+                    group.findViewById<Chip>(selectedId).text.toString().lowercase()
+                mainViewModel.getGeometriesItemByType(selectedDisaster)
             }
+        }
     }
 
     private fun getCurrentLocation() {

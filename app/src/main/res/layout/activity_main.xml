@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner_area"
@@ -25,15 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="4dp"
-            android:layout_weight="1" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner_type"
-            style="@style/SpinnerBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="8dp"
             android:layout_weight="1" />
 
         <ImageButton
@@ -47,6 +39,65 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_settings" />
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_area">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_disaster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_flood"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/flood" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_earthquake"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/earthquake" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_fire"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fire" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_haze"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/haze" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_wind"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wind" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_volcano"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/volcano" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <include
