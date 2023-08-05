@@ -7,16 +7,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -78,7 +74,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mainViewModel.geometriesItem.observe(this) { geometriesItem ->
             disasterAdapter.submitList(geometriesItem)
-            bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility =
+            mainBinding.bottomSheet.tvNoData.visibility =
                 if (geometriesItem?.isEmpty() as Boolean) View.VISIBLE else View.GONE
             for (i in geometriesItem.indices) {
                 listLatLng.add(
@@ -91,19 +87,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             showMarker()
         }
 
-        with(bottomSheetLayout.findViewById<RecyclerView>(R.id.rv_disaster)) {
+        with(mainBinding.bottomSheet.rvDisaster) {
             layoutManager = LinearLayoutManager(context)
             adapter = disasterAdapter
             isNestedScrollingEnabled = true
         }
 
         mainViewModel.isLoading.observe(this) { isLoading ->
-            bottomSheetLayout.findViewById<ProgressBar>(R.id.progressBar).visibility =
+            mainBinding.bottomSheet.progressBar.visibility =
                 if (isLoading) View.VISIBLE else View.GONE
         }
 
         mainViewModel.isFailed.observe(this) { isFailed ->
-            bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility =
+            mainBinding.bottomSheet.tvNoData.visibility =
                 if (isFailed) View.VISIBLE else View.GONE
         }
 
@@ -119,7 +115,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     position: Int,
                     id: Long
                 ) {
-                    bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility = View.GONE
+                    mainBinding.bottomSheet.tvNoData.visibility = View.GONE
                     listLatLng.clear()
                     if (position == 0) {
                         mainViewModel.getGeometriesItem()
@@ -141,7 +137,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     position: Int,
                     id: Long
                 ) {
-                    bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility = View.GONE
+                    mainBinding.bottomSheet.tvNoData.visibility = View.GONE
                     listLatLng.clear()
                     if (position == 0) {
                         mainViewModel.getGeometriesItem()
