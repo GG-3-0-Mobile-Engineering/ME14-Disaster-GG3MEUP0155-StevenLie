@@ -12,4 +12,11 @@
     <string name="location">Location: %s</string>
     <string name="no_photo">No Photo</string>
     <string name="no_data">No Data</string>
+
+    <string name="flood">Flood</string>
+    <string name="earthquake">Earthquake</string>
+    <string name="fire">Fire</string>
+    <string name="haze">Haze</string>
+    <string name="wind">Wind</string>
+    <string name="volcano">Volcano</string>
 </resources>
