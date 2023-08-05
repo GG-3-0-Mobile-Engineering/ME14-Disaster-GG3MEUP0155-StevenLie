@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.steven.disaster.viewmodel.MainViewModel
 import com.steven.disaster.R
 import com.steven.disaster.data.SettingPreference
@@ -42,7 +41,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 101
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var mainBinding: ActivityMainBinding
     private val disasterAdapter = DisasterAdapter()
     private val listLatLng: MutableList<LatLng> = mutableListOf()
@@ -60,9 +58,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation()
-
-        val bottomSheetLayout: ConstraintLayout = findViewById(R.id.disaster_info_bottom_sheet)
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout)
 
         val pref = SettingPreference.getInstance(application.prefDataStore)
         val settingViewModel = ViewModelProvider(this)[SettingViewModel::class.java]
