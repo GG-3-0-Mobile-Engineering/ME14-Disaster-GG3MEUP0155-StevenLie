@@ -6,6 +6,8 @@
     style="?attr/bottomSheetStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     app:behavior_hideable="false"
     app:behavior_peekHeight="200dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
