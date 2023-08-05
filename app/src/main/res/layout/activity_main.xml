@@ -49,6 +49,8 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <include layout="@layout/disaster_info_bottom_sheet" />
+    <include
+        android:id="@+id/bottom_sheet"
+        layout="@layout/disaster_info_bottom_sheet" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
