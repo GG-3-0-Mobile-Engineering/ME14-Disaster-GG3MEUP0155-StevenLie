@@ -29,7 +29,6 @@ import com.steven.disaster.data.SettingPreference
 import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivityMainBinding
 import com.steven.disaster.data.prefDataStore
-import com.steven.disaster.utils.DisasterType
 import com.steven.disaster.utils.SupportedArea
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
