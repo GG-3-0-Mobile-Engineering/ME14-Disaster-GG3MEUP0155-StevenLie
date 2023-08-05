@@ -1,5 +1,7 @@
-package com.steven.disaster
+package com.steven.disaster.data
 
+import com.steven.disaster.data.response.DisasterResponse
+import com.steven.disaster.data.response.TmaResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

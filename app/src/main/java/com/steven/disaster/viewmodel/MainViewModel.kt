@@ -1,8 +1,11 @@
-package com.steven.disaster
+package com.steven.disaster.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.steven.disaster.data.ApiConfig
+import com.steven.disaster.data.response.DisasterResponse
+import com.steven.disaster.data.response.GeometriesItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

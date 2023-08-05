@@ -1,11 +1,14 @@
-package com.steven.disaster
+package com.steven.disaster.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
+import com.steven.disaster.data.SettingPreference
+import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivitySettingsBinding
+import com.steven.disaster.data.prefDataStore
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var settingsBinding: ActivitySettingsBinding

@@ -1,4 +1,4 @@
-package com.steven.disaster
+package com.steven.disaster.utils
 
 object DisasterType {
     val type = arrayListOf(

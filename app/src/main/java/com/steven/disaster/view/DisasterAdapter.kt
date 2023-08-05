@@ -1,11 +1,14 @@
-package com.steven.disaster
+package com.steven.disaster.view
 
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.steven.disaster.R
+import com.steven.disaster.data.response.GeometriesItem
 import com.steven.disaster.databinding.DisasterItemBinding
+import com.steven.disaster.utils.SupportedArea
 
 class DisasterAdapter : RecyclerView.Adapter<DisasterAdapter.DisasterViewHolder>() {
     private var listDisaster = ArrayList<GeometriesItem?>()

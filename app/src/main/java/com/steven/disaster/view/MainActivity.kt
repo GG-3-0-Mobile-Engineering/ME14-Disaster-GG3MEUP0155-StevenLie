@@ -1,4 +1,4 @@
-package com.steven.disaster
+package com.steven.disaster.view
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -29,7 +29,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.steven.disaster.viewmodel.MainViewModel
+import com.steven.disaster.R
+import com.steven.disaster.data.SettingPreference
+import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivityMainBinding
+import com.steven.disaster.data.prefDataStore
+import com.steven.disaster.utils.DisasterType
+import com.steven.disaster.utils.SupportedArea
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var currentLocation: Location

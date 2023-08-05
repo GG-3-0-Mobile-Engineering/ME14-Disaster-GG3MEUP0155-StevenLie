@@ -1,12 +1,12 @@
-package com.steven.disaster
+package com.steven.disaster.data.response
 
 import com.google.gson.annotations.SerializedName
 
 data class DisasterResponse(
-	@field:SerializedName("result")
+    @field:SerializedName("result")
 	val result: Result? = null,
 
-	@field:SerializedName("statusCode")
+    @field:SerializedName("statusCode")
 	val statusCode: Int? = null
 )
 
@@ -21,7 +21,7 @@ data class Tags(
 )
 
 data class Output(
-	@field:SerializedName("geometries")
+    @field:SerializedName("geometries")
 	val geometries: List<GeometriesItem?>? = null,
 )
 
@@ -54,6 +54,6 @@ data class GeometriesItem(
 )
 
 data class Result(
-	@field:SerializedName("objects")
+    @field:SerializedName("objects")
 	val objects: Objects? = null,
 )

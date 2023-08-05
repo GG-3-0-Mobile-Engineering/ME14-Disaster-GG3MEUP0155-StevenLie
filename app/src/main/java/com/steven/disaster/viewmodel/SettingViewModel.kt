@@ -1,9 +1,10 @@
-package com.steven.disaster
+package com.steven.disaster.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.steven.disaster.data.SettingPreference
 import kotlinx.coroutines.launch
 
 class SettingViewModel : ViewModel() {

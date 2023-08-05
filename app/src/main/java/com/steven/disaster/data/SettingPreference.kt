@@ -1,4 +1,4 @@
-package com.steven.disaster
+package com.steven.disaster.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

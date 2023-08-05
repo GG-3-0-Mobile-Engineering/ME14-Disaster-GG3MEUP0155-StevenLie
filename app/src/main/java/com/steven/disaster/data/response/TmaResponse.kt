@@ -1,4 +1,4 @@
-package com.steven.disaster
+package com.steven.disaster.data.response
 
 import com.google.gson.annotations.SerializedName
 
