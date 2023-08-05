@@ -1,6 +1,5 @@
 package com.steven.disaster.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val listMarker: MutableList<Marker?> = mutableListOf()
     private var map: GoogleMap? = null
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -84,8 +82,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mainViewModel.geometriesItem.observe(this) { geometriesItem ->
-            disasterAdapter.setDisaster(geometriesItem)
-            disasterAdapter.notifyDataSetChanged()
+            disasterAdapter.submitList(geometriesItem)
             bottomSheetLayout.findViewById<TextView>(R.id.tv_no_data).visibility =
                 if (geometriesItem?.isEmpty() as Boolean) View.VISIBLE else View.GONE
             for (i in geometriesItem.indices) {
