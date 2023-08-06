@@ -19,4 +19,6 @@
     <string name="haze">Haze</string>
     <string name="wind">Wind</string>
     <string name="volcano">Volcano</string>
+
+    <string name="search_view_hint">Search province</string>
 </resources>
