@@ -18,6 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         settingsBinding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(settingsBinding.root)
 
+        setSupportActionBar(settingsBinding.toolbarSetting)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val pref = SettingPreference.getInstance(application.prefDataStore)
