@@ -5,8 +5,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -105,27 +103,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val listAreaValues: MutableList<String> = SupportedArea.area.values.toMutableList()
         val listAreaKeys = SupportedArea.area.keys.toList()
-        mainBinding.spinnerArea.adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listAreaValues)
-        mainBinding.spinnerArea.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    mainBinding.bottomSheet.tvNoData.visibility = View.GONE
-                    listLatLng.clear()
-                    if (position == 0) {
-                        mainViewModel.getGeometriesItem()
-                    } else {
-                        mainViewModel.getGeometriesItemByLocation(listAreaKeys[position])
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
 
         mainBinding.chipGroupDisaster.setOnCheckedStateChangeListener { group, _ ->
             val selectedId = group.checkedChipId
