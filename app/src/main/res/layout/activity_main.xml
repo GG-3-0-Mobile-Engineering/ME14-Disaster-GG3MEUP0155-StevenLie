@@ -1,107 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/search_view_hint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map_fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:background="@android:color/black" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical">
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner_area"
-            style="@style/SpinnerBackground"
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1" />
+            android:hint="@string/search_view_hint"
+            app:menu="@menu/search_bar_menu" />
 
-        <ImageButton
-            android:id="@+id/img_btn_settings"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_search">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_disaster"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/circle_button_settings"
-            android:backgroundTint="@color/green"
-            android:contentDescription="@string/settings"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_settings" />
+            app:singleSelection="true">
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_area">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chip_group_disaster"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_flood"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:singleSelection="true">
+                android:text="@string/flood" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_flood"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/flood" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_earthquake"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/earthquake" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_earthquake"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/earthquake" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_fire"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fire" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_fire"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fire" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_haze"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/haze" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_haze"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/haze" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_wind"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wind" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_wind"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/wind" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_volcano"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/volcano" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_volcano"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/volcano" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
 
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <include
-        android:id="@+id/bottom_sheet"
-        layout="@layout/disaster_info_bottom_sheet" />
+        <include
+            android:id="@+id/bottom_sheet"
+            layout="@layout/disaster_info_bottom_sheet" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
