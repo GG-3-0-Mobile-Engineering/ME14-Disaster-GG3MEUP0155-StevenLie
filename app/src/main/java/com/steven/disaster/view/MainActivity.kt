@@ -65,11 +65,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        mainBinding.imgBtnSettings.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
-
         mainViewModel.geometriesItem.observe(this) { geometriesItem ->
             disasterAdapter.submitList(geometriesItem)
             mainBinding.bottomSheet.tvNoData.visibility =
@@ -99,6 +94,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel.isFailed.observe(this) { isFailed ->
             mainBinding.bottomSheet.tvNoData.visibility =
                 if (isFailed) View.VISIBLE else View.GONE
+        }
+
+        mainBinding.searchBarLocation.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_settings -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                else -> false
+            }
         }
 
         val listAreaValues: MutableList<String> = SupportedArea.area.values.toMutableList()
