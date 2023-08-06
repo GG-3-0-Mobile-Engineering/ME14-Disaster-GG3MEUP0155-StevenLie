@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         setContentView(mainBinding.root)
 
+        mainBinding.searchViewLocation.setupWithSearchBar(mainBinding.searchBarLocation)
+
         val mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
