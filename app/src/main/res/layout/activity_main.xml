@@ -64,42 +64,42 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_flood"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                style="@style/chipBackgroundCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/flood" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_earthquake"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                style="@style/chipBackgroundCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/earthquake" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_fire"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                style="@style/chipBackgroundCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/fire" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_haze"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                style="@style/chipBackgroundCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/haze" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_wind"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                style="@style/chipBackgroundCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wind" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_volcano"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                style="@style/chipBackgroundCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/volcano" />
