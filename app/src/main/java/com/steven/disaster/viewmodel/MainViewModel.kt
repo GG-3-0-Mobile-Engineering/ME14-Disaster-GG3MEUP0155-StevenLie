@@ -46,7 +46,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    fun getGeometriesItemByLocation(id: String) {
+    fun getGeometriesItemByLocation(id: String?) {
         _isLoading.value = true
         _isFailed.value = false
         val client = ApiConfig.getApiService().getReports(id)
