@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -88,6 +90,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             isNestedScrollingEnabled = true
         }
 
+        val locationSuggestionAdapter = LocationSuggestionAdapter { location ->
+            mainBinding.searchViewLocation.setText(location)
+        }
+
+        with(mainBinding.rvLocationSuggestion) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = locationSuggestionAdapter
+        }
+
+        mainBinding.searchViewLocation.editText.setOnEditorActionListener { _, _, _ ->
+            mainBinding.searchBarLocation.text = mainBinding.searchViewLocation.text
+            mainBinding.searchViewLocation.hide()
+            val idLocation =
+                SupportedArea.area[mainBinding.searchViewLocation.text.toString()]
+            mainViewModel.getGeometriesItemByLocation(idLocation)
+            false
+        }
+
+        val listAreaValues = SupportedArea.area.keys.toList()
+
+        mainBinding.searchViewLocation.editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val filterLocation = listAreaValues.filter {
+                    it.contains(s ?: "", ignoreCase = true)
+                }
+                locationSuggestionAdapter.submitList(filterLocation)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         mainViewModel.isLoading.observe(this) { isLoading ->
             mainBinding.bottomSheet.progressBar.visibility =
                 if (isLoading) View.VISIBLE else View.GONE
@@ -110,8 +145,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        val listAreaValues: MutableList<String> = SupportedArea.area.values.toMutableList()
-        val listAreaKeys = SupportedArea.area.keys.toList()
+
 
         mainBinding.chipGroupDisaster.setOnCheckedStateChangeListener { group, _ ->
             val selectedId = group.checkedChipId
