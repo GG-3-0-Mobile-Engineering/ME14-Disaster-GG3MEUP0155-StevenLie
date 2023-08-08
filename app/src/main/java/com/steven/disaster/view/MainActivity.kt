@@ -2,7 +2,6 @@ package com.steven.disaster.view
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,7 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.chip.Chip
 import com.steven.disaster.viewmodel.MainViewModel
@@ -31,10 +30,10 @@ import com.steven.disaster.data.SettingPreference
 import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivityMainBinding
 import com.steven.disaster.data.prefDataStore
+import com.steven.disaster.data.response.GeometriesItem
 import com.steven.disaster.utils.SupportedArea
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var currentLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 101
 
@@ -45,9 +44,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val locationSuggestionAdapter = LocationSuggestionAdapter { location ->
         mainBinding.searchViewLocation.setText(location)
     }
-    private val listLatLng: MutableList<LatLng> = mutableListOf()
-    private val listMarker: MutableList<Marker?> = mutableListOf()
+
     private var map: GoogleMap? = null
+    private var currentLocationLat: Double? = null
+    private var currentLocationLng: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,20 +57,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(mainBinding.root)
 
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
-        observeDisasterData()
-        observeIsEmptyState()
-        observeIsFailedState()
-        observeIsLoadingState()
-
-        setUpSearchBar()
-        setUpSearchBarMenu()
-        setUpBottomSheetRecyclerView()
-        setUpSearchView()
-        setUpChipDisasterFilter()
-        setUpLocationSuggestionRecyclerView()
-
-        searchDisasterFromSearchViewInput()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation()
@@ -108,12 +94,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                currentLocation = location
-                val mapFragment =
-                    supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
-                mapFragment.getMapAsync(this)
-            }
+            val mapFragment =
+                supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+            currentLocationLat = location.latitude
+            currentLocationLng = location.longitude
         }
     }
 
@@ -124,43 +109,85 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            permissionCode -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation()
+            permissionCode -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getCurrentLocation()
+                } else {
+                    val mapFragment =
+                        supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+                    mapFragment.getMapAsync(this)
+                }
             }
         }
     }
 
     override fun onMapReady(map: GoogleMap) {
         this.map = map
-        val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
+        map.uiSettings.isMapToolbarEnabled = false
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 4.0f))
-        map.addMarker(
-            MarkerOptions()
-                .position(latLng)
-                .title(getString(R.string.your_location))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        )
-        showMarker()
+        observeDisasterData()
+        observeIsEmptyState()
+        observeIsFailedState()
+        observeIsLoadingState()
+
+        setUpSearchBar()
+        setUpSearchBarMenu()
+        setUpBottomSheetRecyclerView()
+        setUpSearchView()
+        setUpChipDisasterFilter()
+        setUpLocationSuggestionRecyclerView()
+
+        searchDisasterFromSearchViewInput()
     }
 
-    private fun showMarker() {
-        clearMarker()
-        for (latLong in listLatLng) {
-            val disasterMarker = map?.addMarker(
+    private fun showMarker(geometriesItem: List<GeometriesItem?>) {
+        map?.clear()
+        val bounds = LatLngBounds.builder()
+
+        if (currentLocationLat != null && currentLocationLng != null) {
+            val latLng = LatLng(currentLocationLat!!, currentLocationLng!!)
+            bounds.include(latLng)
+            map?.addMarker(
                 MarkerOptions()
-                    .position(latLong)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            )
-            listMarker.add(disasterMarker)
+                    .position(latLng)
+                    .title(getString(R.string.your_location))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            )?.showInfoWindow()
         }
-    }
 
-    private fun clearMarker() {
-        for (disasterMarker in listMarker) {
-            disasterMarker?.remove()
+        if (geometriesItem.isNotEmpty()) {
+            for (item in geometriesItem) {
+                val latLng =
+                    LatLng(item?.coordinates?.get(1) as Double, item.coordinates[0] as Double)
+                val type = item.properties?.disasterType
+                val location = SupportedArea.area.entries.find {
+                    it.value == item.properties?.tags?.instanceRegionCode
+                }?.key
+
+                bounds.include(latLng)
+                map?.addMarker(
+                    MarkerOptions()
+                        .position(latLng)
+                        .title(type)
+                        .snippet(location)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                )
+            }
         }
-        listMarker.clear()
+
+        if (geometriesItem.isNotEmpty()) {
+            val mapPadding = (resources.displayMetrics.widthPixels * 0.2).toInt()
+            map?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), mapPadding))
+        } else if (currentLocationLat != null && currentLocationLng != null) {
+            map?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        currentLocationLat!!,
+                        currentLocationLng!!
+                    ), 4.0f
+                )
+            )
+        }
     }
 
     private fun observeDisasterData() {
@@ -168,15 +195,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             disasterAdapter.submitList(geometriesItem)
             mainBinding.bottomSheet.tvNoData.visibility =
                 if (geometriesItem?.isEmpty() as Boolean) View.VISIBLE else View.GONE
-            for (i in geometriesItem.indices) {
-                listLatLng.add(
-                    LatLng(
-                        geometriesItem[i]?.coordinates?.get(1) as Double,
-                        geometriesItem[i]?.coordinates?.get(0) as Double
-                    )
-                )
-            }
-            showMarker()
+            showMarker(geometriesItem)
         }
     }
 
@@ -269,7 +288,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getDataBySearchAndChip() {
-        listLatLng.clear()
         val selectedId = mainBinding.chipGroupDisaster.checkedChipId
         val idLocation =
             SupportedArea.area[mainBinding.searchViewLocation.text.toString()]
