@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun observeIsFailedState() {
-        mainViewModel.isFailed.observe(this) { isFailed ->
+        mainViewModel.isFailure.observe(this) { isFailed ->
             mainBinding.bottomSheet.tvNoData.visibility =
                 if (isFailed) View.VISIBLE else View.GONE
         }

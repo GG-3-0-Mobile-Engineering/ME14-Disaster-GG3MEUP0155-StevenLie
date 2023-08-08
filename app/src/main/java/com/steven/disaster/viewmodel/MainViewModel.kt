@@ -17,8 +17,8 @@ class MainViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _isFailed = MutableLiveData<Boolean>()
-    val isFailed: LiveData<Boolean> = _isFailed
+    private val _isFailure = MutableLiveData<Boolean>()
+    val isFailure: LiveData<Boolean> = _isFailure
 
     init {
         getGeometriesItem()
@@ -26,7 +26,7 @@ class MainViewModel : ViewModel() {
 
     fun getGeometriesItem() {
         _isLoading.value = true
-        _isFailed.value = false
+        _isFailure.value = false
         val client = ApiConfig.getApiService().getReports()
         client.enqueue(object : Callback<DisasterResponse> {
             override fun onResponse(
@@ -41,14 +41,14 @@ class MainViewModel : ViewModel() {
 
             override fun onFailure(call: Call<DisasterResponse>, t: Throwable) {
                 _isLoading.value = false
-                _isFailed.value = true
+                _isFailure.value = true
             }
         })
     }
 
     fun getGeometriesItemByLocation(id: String?) {
         _isLoading.value = true
-        _isFailed.value = false
+        _isFailure.value = false
         val client = ApiConfig.getApiService().getReports(id)
         client.enqueue(object : Callback<DisasterResponse> {
             override fun onResponse(
@@ -63,14 +63,14 @@ class MainViewModel : ViewModel() {
 
             override fun onFailure(call: Call<DisasterResponse>, t: Throwable) {
                 _isLoading.value = false
-                _isFailed.value = true
+                _isFailure.value = true
             }
         })
     }
 
     fun getGeometriesItemByType(type: String) {
         _isLoading.value = true
-        _isFailed.value = false
+        _isFailure.value = false
         val client = ApiConfig.getApiService().getReportByType(type)
         client.enqueue(object : Callback<DisasterResponse> {
             override fun onResponse(
@@ -85,7 +85,7 @@ class MainViewModel : ViewModel() {
 
             override fun onFailure(call: Call<DisasterResponse>, t: Throwable) {
                 _isLoading.value = false
-                _isFailed.value = true
+                _isFailure.value = true
             }
         })
     }
