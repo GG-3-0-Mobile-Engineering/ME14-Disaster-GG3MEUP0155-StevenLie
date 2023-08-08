@@ -35,7 +35,6 @@ import com.steven.disaster.utils.SupportedArea
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private val permissionCode = 101
 
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
-                permissionCode
+                LOCATION_PERMISSION_CODE
             )
             return
         }
@@ -109,7 +108,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            permissionCode -> {
+            LOCATION_PERMISSION_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getCurrentLocation()
                 } else {
@@ -298,5 +297,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             mainBinding.chipGroupDisaster.findViewById<Chip>(selectedId).text.toString().lowercase()
         }
         mainViewModel.getGeometriesItem(idLocation, selectedDisaster)
+    }
+
+    companion object {
+        private const val LOCATION_PERMISSION_CODE = 101
     }
 }
