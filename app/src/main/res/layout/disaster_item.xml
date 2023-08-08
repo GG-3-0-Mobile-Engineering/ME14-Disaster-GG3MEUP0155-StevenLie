@@ -10,7 +10,9 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/no_photo"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -29,10 +31,11 @@
 
     <TextView
         android:id="@+id/tv_created_by"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_disaster"
         app:layout_constraintTop_toBottomOf="@+id/tv_disaster_type"
         tools:text="@string/created_by" />
@@ -48,20 +51,22 @@
 
     <TextView
         android:id="@+id/tv_location"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_disaster"
         app:layout_constraintTop_toBottomOf="@+id/tv_created_by"
         tools:text="@string/location" />
 
     <TextView
         android:id="@+id/tv_status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_disaster"
         app:layout_constraintTop_toBottomOf="@+id/tv_location"
         tools:text="@string/status" />
