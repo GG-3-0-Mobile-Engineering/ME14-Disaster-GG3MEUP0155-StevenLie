@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -187,6 +188,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun observeIsFailedState() {
         mainViewModel.isFailure.observe(this) { isFailed ->
+            if (isFailed) {
+                Toast.makeText(this, "Failed to get data", Toast.LENGTH_SHORT).show()
+            }
             mainBinding.bottomSheet.tvNoData.visibility =
                 if (isFailed) View.VISIBLE else View.GONE
         }
