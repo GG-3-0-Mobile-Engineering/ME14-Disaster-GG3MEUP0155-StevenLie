@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         observeDisasterData()
+        observeIsEmptyState()
         observeIsFailedState()
         observeIsLoadingState()
 
@@ -175,6 +176,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             }
             showMarker()
+        }
+    }
+
+    private fun observeIsEmptyState() {
+        mainViewModel.isEmpty.observe(this) { isEmpty ->
+            mainBinding.bottomSheet.tvNoData.visibility = if (isEmpty) View.VISIBLE else View.GONE
         }
     }
 

@@ -20,6 +20,9 @@ class MainViewModel : ViewModel() {
     private val _isFailure = MutableLiveData<Boolean>()
     val isFailure: LiveData<Boolean> = _isFailure
 
+    private val _isEmpty = MutableLiveData<Boolean>()
+    val isEmpty: LiveData<Boolean> = _isEmpty
+
     init {
         getGeometriesItem()
     }
@@ -27,6 +30,7 @@ class MainViewModel : ViewModel() {
     fun getGeometriesItem() {
         _isLoading.value = true
         _isFailure.value = false
+        _isEmpty.value = false
         val client = ApiConfig.getApiService().getReports()
         client.enqueue(object : Callback<DisasterResponse> {
             override fun onResponse(
