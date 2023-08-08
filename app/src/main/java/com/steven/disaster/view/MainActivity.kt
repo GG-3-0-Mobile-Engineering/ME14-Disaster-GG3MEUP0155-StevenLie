@@ -253,17 +253,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setUpChipDisasterFilter() {
-        mainBinding.chipGroupDisaster.setOnCheckedStateChangeListener { group, _ ->
-            val selectedId = group.checkedChipId
+        mainBinding.chipGroupDisaster.setOnCheckedStateChangeListener { _, _ ->
             mainBinding.bottomSheet.tvNoData.visibility = View.GONE
-            listLatLng.clear()
-            if (selectedId == View.NO_ID) {
-                mainViewModel.getGeometriesItem()
-            } else {
-                val selectedDisaster =
-                    group.findViewById<Chip>(selectedId).text.toString().lowercase()
-                mainViewModel.getGeometriesItemByType(selectedDisaster)
-            }
+            getDataBySearchAndChip()
         }
     }
 
@@ -271,10 +263,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainBinding.searchViewLocation.editText.setOnEditorActionListener { _, _, _ ->
             mainBinding.searchBarLocation.text = mainBinding.searchViewLocation.text
             mainBinding.searchViewLocation.hide()
-            val idLocation =
-                SupportedArea.area[mainBinding.searchViewLocation.text.toString()]
-            mainViewModel.getGeometriesItemByLocation(idLocation)
+            getDataBySearchAndChip()
             false
         }
+    }
+
+    private fun getDataBySearchAndChip() {
+        listLatLng.clear()
+        val selectedId = mainBinding.chipGroupDisaster.checkedChipId
+        val idLocation =
+            SupportedArea.area[mainBinding.searchViewLocation.text.toString()]
+
+        val selectedDisaster: String? = if (selectedId == View.NO_ID) {
+            null
+        } else {
+            mainBinding.chipGroupDisaster.findViewById<Chip>(selectedId).text.toString().lowercase()
+        }
+        mainViewModel.getGeometriesItem(idLocation, selectedDisaster)
     }
 }

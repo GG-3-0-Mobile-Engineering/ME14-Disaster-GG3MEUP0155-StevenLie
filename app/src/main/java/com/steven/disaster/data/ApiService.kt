@@ -8,10 +8,10 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("reports")
-    fun getReports(@Query("admin") admin: String? = null): Call<DisasterResponse>
-
-    @GET("reports")
-    fun getReportByType(@Query("disaster") disaster: String): Call<DisasterResponse>
+    fun getReports(
+        @Query("admin") admin: String? = null,
+        @Query("disaster") disaster: String? = null
+    ): Call<DisasterResponse>
 
     @GET("floodgauges?admin=ID-JK")
     fun getTma(): Call<TmaResponse>

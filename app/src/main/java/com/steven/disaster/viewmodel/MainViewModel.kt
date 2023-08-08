@@ -27,11 +27,11 @@ class MainViewModel : ViewModel() {
         getGeometriesItem()
     }
 
-    fun getGeometriesItem() {
+    fun getGeometriesItem(locationId: String? = null, disasterType: String? = null) {
         _isLoading.value = true
         _isFailure.value = false
         _isEmpty.value = false
-        val client = ApiConfig.getApiService().getReports()
+        val client = ApiConfig.getApiService().getReports(locationId, disasterType)
         client.enqueue(object : Callback<DisasterResponse> {
             override fun onResponse(
                 call: Call<DisasterResponse>,
@@ -39,51 +39,11 @@ class MainViewModel : ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    _geometriesItem.value = response.body()?.result?.objects?.output?.geometries
-                }
-            }
-
-            override fun onFailure(call: Call<DisasterResponse>, t: Throwable) {
-                _isLoading.value = false
-                _isFailure.value = true
-            }
-        })
-    }
-
-    fun getGeometriesItemByLocation(id: String?) {
-        _isLoading.value = true
-        _isFailure.value = false
-        val client = ApiConfig.getApiService().getReports(id)
-        client.enqueue(object : Callback<DisasterResponse> {
-            override fun onResponse(
-                call: Call<DisasterResponse>,
-                response: Response<DisasterResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _geometriesItem.value = response.body()?.result?.objects?.output?.geometries
-                }
-            }
-
-            override fun onFailure(call: Call<DisasterResponse>, t: Throwable) {
-                _isLoading.value = false
-                _isFailure.value = true
-            }
-        })
-    }
-
-    fun getGeometriesItemByType(type: String) {
-        _isLoading.value = true
-        _isFailure.value = false
-        val client = ApiConfig.getApiService().getReportByType(type)
-        client.enqueue(object : Callback<DisasterResponse> {
-            override fun onResponse(
-                call: Call<DisasterResponse>,
-                response: Response<DisasterResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _geometriesItem.value = response.body()?.result?.objects?.output?.geometries
+                    val responseResult = response.body()?.result?.objects?.output?.geometries
+                    _geometriesItem.value = responseResult
+                    if (responseResult?.size == 0) {
+                        _isEmpty.value = true
+                    }
                 }
             }
 
