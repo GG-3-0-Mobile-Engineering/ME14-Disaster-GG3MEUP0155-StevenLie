@@ -43,7 +43,9 @@ class DisasterAdapter : ListAdapter<GeometriesItem?, DisasterAdapter.DisasterVie
                 )
             tvLocation.text = itemView.context.getString(
                 R.string.location,
-                SupportedArea.area[disaster?.properties?.tags?.instanceRegionCode]
+                SupportedArea.area.entries.find {
+                    it.value == disaster?.properties?.tags?.instanceRegionCode
+                }?.key
             )
             tvStatus.text =
                 itemView.context.getString(R.string.status, disaster?.properties?.status)
