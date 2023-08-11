@@ -21,4 +21,6 @@
     <string name="volcano">Volcano</string>
 
     <string name="search_view_hint">Search province</string>
+    <string name="water_level_notification_title">Water Level Warning</string>
+    <string name="water_level_notification_description">Notification based on water level</string>
 </resources>
