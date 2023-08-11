@@ -124,6 +124,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         this.map = map
         map.uiSettings.isMapToolbarEnabled = false
 
+        mainViewModel.getGeometriesItem()
         observeDisasterData()
         observeIsEmptyState()
         observeIsFailedState()

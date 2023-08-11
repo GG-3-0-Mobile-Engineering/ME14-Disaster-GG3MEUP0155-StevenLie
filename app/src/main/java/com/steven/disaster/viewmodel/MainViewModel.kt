@@ -23,10 +23,6 @@ class MainViewModel : ViewModel() {
     private val _isEmpty = MutableLiveData<Boolean>()
     val isEmpty: LiveData<Boolean> = _isEmpty
 
-    init {
-        getGeometriesItem()
-    }
-
     fun getGeometriesItem(locationId: String? = null, disasterType: String? = null) {
         _isLoading.value = true
         _isFailure.value = false
