@@ -219,7 +219,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun observeIsFailedState() {
         mainViewModel.isFailure.observe(this) { isFailed ->
             if (isFailed) {
-                Toast.makeText(this, "Failed to get data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.failed_to_get_data), Toast.LENGTH_SHORT)
+                    .show()
             }
             mainBinding.bottomSheet.tvNoData.visibility =
                 if (isFailed) View.VISIBLE else View.GONE
