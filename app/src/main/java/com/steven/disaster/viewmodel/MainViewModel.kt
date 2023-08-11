@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.steven.disaster.data.ApiConfig
 import com.steven.disaster.data.response.DisasterResponse
 import com.steven.disaster.data.response.GeometriesItem
+import com.steven.disaster.data.response.TmaResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,9 @@ class MainViewModel : ViewModel() {
 
     private val _isEmpty = MutableLiveData<Boolean>()
     val isEmpty: LiveData<Boolean> = _isEmpty
+
+    private val _tmaStatus = MutableLiveData<String?>()
+    val tmaStatus: LiveData<String?> = _tmaStatus
 
     fun getGeometriesItem(locationId: String? = null, disasterType: String? = null) {
         _isLoading.value = true
@@ -47,6 +51,30 @@ class MainViewModel : ViewModel() {
                 _isLoading.value = false
                 _isFailure.value = true
             }
+        })
+    }
+
+    fun getFirstTmaStatus() {
+        val client = ApiConfig.getApiService().getTma()
+        client.enqueue(object : Callback<TmaResponse> {
+            override fun onResponse(call: Call<TmaResponse>, response: Response<TmaResponse>) {
+                if (response.isSuccessful) {
+                    val responseResult = response.body()?.result?.objects?.output?.geometries
+                    if (responseResult?.isNotEmpty() == true) {
+                        val firstResult = responseResult[0]?.properties
+                        val firstGaugeName = firstResult?.gaugeNameId
+                        if (firstResult?.observations?.isNotEmpty() == true) {
+                            val firstResultStatus = firstResult.observations[0]?.f4
+                            _tmaStatus.value =
+                                "$firstGaugeName berada pada status $firstResultStatus"
+                        }
+                    } else {
+                        _tmaStatus.value = null
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<TmaResponse>, t: Throwable) {}
         })
     }
 }
