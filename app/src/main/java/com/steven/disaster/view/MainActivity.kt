@@ -317,7 +317,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel.tmaStatus.observe(this) { tmaStatus ->
             if (tmaStatus != null) {
                 val request =
-                    PeriodicWorkRequestBuilder<WaterLevelNotificationWorker>(2, TimeUnit.SECONDS)
+                    PeriodicWorkRequestBuilder<WaterLevelNotificationWorker>(3, TimeUnit.HOURS)
                         .setInputData(workDataOf(WORK_MANAGER_DATA_KEY to tmaStatus))
                         .setConstraints(Constraints(requiredNetworkType = NetworkType.CONNECTED))
                         .build()
