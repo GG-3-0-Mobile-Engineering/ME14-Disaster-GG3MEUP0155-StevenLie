@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.steven.disaster.databinding.LocationSuggestionItemBinding
 
-class LocationSuggestionAdapter (private val onItemClicked: (String) -> Unit) :
+class LocationSuggestionAdapter(private val onItemClicked: (String) -> Unit) :
     ListAdapter<String, LocationSuggestionAdapter.SuggestionLocationViewHolder>(
         object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
@@ -42,7 +42,11 @@ class LocationSuggestionAdapter (private val onItemClicked: (String) -> Unit) :
         parent: ViewGroup,
         viewType: Int
     ): SuggestionLocationViewHolder {
-        val view = LocationSuggestionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = LocationSuggestionItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return SuggestionLocationViewHolder(view, onItemClicked)
     }
 
