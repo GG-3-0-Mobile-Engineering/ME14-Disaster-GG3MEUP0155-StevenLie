@@ -13,6 +13,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,8 +38,11 @@ import com.steven.disaster.databinding.ActivityMainBinding
 import com.steven.disaster.data.prefDataStore
 import com.steven.disaster.data.response.GeometriesItem
 import com.steven.disaster.utils.SupportedArea
+import com.steven.disaster.utils.WaterLevelNotificationWorker
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+    private lateinit var workManager: WorkManager
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var mainBinding: ActivityMainBinding
@@ -56,6 +65,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(mainBinding.root)
 
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        workManager = WorkManager.getInstance(applicationContext)
+        createWorkManager()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation()
@@ -300,7 +311,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel.getGeometriesItem(idLocation, selectedDisaster)
     }
 
+    private fun createWorkManager() {
+        mainViewModel.getFirstTmaStatus()
+        mainViewModel.tmaStatus.observe(this) { tmaStatus ->
+            if (tmaStatus != null) {
+                val request =
+                    PeriodicWorkRequestBuilder<WaterLevelNotificationWorker>(2, TimeUnit.SECONDS)
+                        .setInputData(workDataOf(WORK_MANAGER_DATA_KEY to tmaStatus))
+                        .setConstraints(Constraints(requiredNetworkType = NetworkType.CONNECTED))
+                        .build()
+
+                workManager.enqueueUniquePeriodicWork(
+                    NOTIFICATION_WORK_NAME,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    request
+                )
+            }
+        }
+
+    }
+
     companion object {
         private const val LOCATION_PERMISSION_CODE = 101
+        private const val NOTIFICATION_WORK_NAME = "NOTIFICATION_WORK_NAME"
+        const val WORK_MANAGER_DATA_KEY = "MESSAGE"
     }
 }
