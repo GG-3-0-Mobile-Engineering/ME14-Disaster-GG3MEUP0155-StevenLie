@@ -24,4 +24,5 @@
     <string name="water_level_notification_title">Water Level Warning</string>
     <string name="water_level_notification_description">Notification based on water level</string>
     <string name="failed_to_get_data">Failed to get data</string>
+    <string name="tma_status">%s berada pada status %s</string>
 </resources>
