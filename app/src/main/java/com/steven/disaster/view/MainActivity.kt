@@ -7,11 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -32,21 +32,22 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.chip.Chip
 import com.steven.disaster.viewmodel.MainViewModel
 import com.steven.disaster.R
-import com.steven.disaster.data.SettingPreference
 import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivityMainBinding
-import com.steven.disaster.data.prefDataStore
 import com.steven.disaster.data.response.GeometriesItem
 import com.steven.disaster.utils.SupportedArea
 import com.steven.disaster.utils.WaterLevelNotificationWorker
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var workManager: WorkManager
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var mainBinding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
+    private val settingViewModel: SettingViewModel by viewModels()
 
     private val disasterAdapter = DisasterAdapter()
     private val locationSuggestionAdapter = LocationSuggestionAdapter { location ->
@@ -64,16 +65,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         setContentView(mainBinding.root)
 
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         workManager = WorkManager.getInstance(applicationContext)
         createWorkManager()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation()
-
-        val pref = SettingPreference.getInstance(application.prefDataStore)
-        val settingViewModel = ViewModelProvider(this)[SettingViewModel::class.java]
-        settingViewModel.setPref(pref)
 
         settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
             if (isDarkMode) {

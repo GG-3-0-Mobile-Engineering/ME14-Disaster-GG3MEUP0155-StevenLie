@@ -3,15 +3,16 @@ package com.steven.disaster.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
-import com.steven.disaster.data.SettingPreference
 import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivitySettingsBinding
-import com.steven.disaster.data.prefDataStore
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
     private lateinit var settingsBinding: ActivitySettingsBinding
+    private val settingViewModel: SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +21,6 @@ class SettingsActivity : AppCompatActivity() {
 
         setSupportActionBar(settingsBinding.toolbarSetting)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val pref = SettingPreference.getInstance(application.prefDataStore)
-        val settingViewModel = ViewModelProvider(this)[SettingViewModel::class.java]
-        settingViewModel.setPref(pref)
 
         settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
             if (isDarkMode) {

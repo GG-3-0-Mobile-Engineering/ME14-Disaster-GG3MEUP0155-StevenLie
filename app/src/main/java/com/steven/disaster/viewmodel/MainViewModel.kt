@@ -1,17 +1,22 @@
 package com.steven.disaster.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.steven.disaster.data.ApiConfig
+import com.steven.disaster.data.ApiService
 import com.steven.disaster.data.response.DisasterResponse
 import com.steven.disaster.data.response.GeometriesItem
 import com.steven.disaster.data.response.TmaResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val apiService: ApiService, context: Application) :
+    ViewModel() {
     private val _geometriesItem = MutableLiveData<List<GeometriesItem?>?>()
     val geometriesItem: LiveData<List<GeometriesItem?>?> = _geometriesItem
 
@@ -31,7 +36,7 @@ class MainViewModel : ViewModel() {
         _isLoading.value = true
         _isFailure.value = false
         _isEmpty.value = false
-        val client = ApiConfig.getApiService().getReports(locationId, disasterType)
+        val client = apiService.getReports(locationId, disasterType)
         client.enqueue(object : Callback<DisasterResponse> {
             override fun onResponse(
                 call: Call<DisasterResponse>,
@@ -55,7 +60,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun getFirstTmaStatus() {
-        val client = ApiConfig.getApiService().getTma()
+        val client = apiService.getTma()
         client.enqueue(object : Callback<TmaResponse> {
             override fun onResponse(call: Call<TmaResponse>, response: Response<TmaResponse>) {
                 if (response.isSuccessful) {
