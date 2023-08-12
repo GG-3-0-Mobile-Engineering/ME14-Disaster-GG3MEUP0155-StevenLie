@@ -65,12 +65,55 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         setContentView(mainBinding.root)
 
+        checkTheme()
+
         workManager = WorkManager.getInstance(applicationContext)
         createWorkManager()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation()
+    }
 
+    override fun onMapReady(map: GoogleMap) {
+        this.map = map
+        map.uiSettings.isMapToolbarEnabled = false
+
+        mainViewModel.getGeometriesItem()
+        observeDisasterData()
+        observeIsEmptyState()
+        observeIsFailedState()
+        observeIsLoadingState()
+
+        setUpSearchBar()
+        setUpSearchBarMenu()
+        setUpBottomSheetRecyclerView()
+        setUpSearchView()
+        setUpChipDisasterFilter()
+        setUpLocationSuggestionRecyclerView()
+
+        searchDisasterFromSearchViewInput()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getCurrentLocation()
+                } else {
+                    val mapFragment =
+                        supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+                    mapFragment.getMapAsync(this)
+                }
+            }
+        }
+    }
+
+    private fun checkTheme() {
         settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
             if (isDarkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -106,45 +149,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             currentLocationLat = location.latitude
             currentLocationLng = location.longitude
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            LOCATION_PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentLocation()
-                } else {
-                    val mapFragment =
-                        supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
-                    mapFragment.getMapAsync(this)
-                }
-            }
-        }
-    }
-
-    override fun onMapReady(map: GoogleMap) {
-        this.map = map
-        map.uiSettings.isMapToolbarEnabled = false
-
-        mainViewModel.getGeometriesItem()
-        observeDisasterData()
-        observeIsEmptyState()
-        observeIsFailedState()
-        observeIsLoadingState()
-
-        setUpSearchBar()
-        setUpSearchBarMenu()
-        setUpBottomSheetRecyclerView()
-        setUpSearchView()
-        setUpChipDisasterFilter()
-        setUpLocationSuggestionRecyclerView()
-
-        searchDisasterFromSearchViewInput()
     }
 
     private fun showMarker(geometriesItem: List<GeometriesItem?>) {
@@ -325,7 +329,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             }
         }
-
     }
 
     companion object {

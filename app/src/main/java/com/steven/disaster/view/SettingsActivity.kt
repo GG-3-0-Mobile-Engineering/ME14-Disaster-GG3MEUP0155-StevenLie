@@ -22,19 +22,8 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(settingsBinding.toolbarSetting)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
-            if (isDarkMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                settingsBinding.switchDarkMode.isChecked = true
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                settingsBinding.switchDarkMode.isChecked = false
-            }
-        }
-
-        settingsBinding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            settingViewModel.saveThemeSetting(isChecked)
-        }
+        observeThemeSetting()
+        setUpSwitchDarkMode()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -44,5 +33,23 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun observeThemeSetting() {
+        settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
+            if (isDarkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                settingsBinding.switchDarkMode.isChecked = true
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                settingsBinding.switchDarkMode.isChecked = false
+            }
+        }
+    }
+
+    private fun setUpSwitchDarkMode() {
+        settingsBinding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            settingViewModel.saveThemeSetting(isChecked)
+        }
     }
 }
