@@ -36,7 +36,7 @@ import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivityMainBinding
 import com.steven.disaster.data.response.GeometriesItem
 import com.steven.disaster.utils.SupportedArea
-import com.steven.disaster.utils.WaterLevelNotificationWorker
+import com.steven.disaster.utils.WaterLevelWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
@@ -317,7 +317,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel.tmaStatus.observe(this) { tmaStatus ->
             if (tmaStatus != null) {
                 val request =
-                    PeriodicWorkRequestBuilder<WaterLevelNotificationWorker>(3, TimeUnit.HOURS)
+                    PeriodicWorkRequestBuilder<WaterLevelWorker>(3, TimeUnit.HOURS)
                         .setInputData(workDataOf(WORK_MANAGER_DATA_KEY to tmaStatus))
                         .setConstraints(Constraints(requiredNetworkType = NetworkType.CONNECTED))
                         .build()

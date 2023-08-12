@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.steven.disaster.view.MainActivity
 
-class WaterLevelNotificationWorker(
+class WaterLevelWorker(
     private val context: Context,
     private val params: WorkerParameters
 ) : CoroutineWorker(context, params) {
