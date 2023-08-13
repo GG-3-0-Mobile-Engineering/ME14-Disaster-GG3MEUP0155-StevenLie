@@ -1,28 +1,20 @@
 package com.steven.disaster.viewmodel
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.steven.disaster.data.SettingPreference
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class SettingViewModel @Inject constructor(dataStore: DataStore<Preferences>) :
-    ViewModel() {
-    private val pref = SettingPreference(dataStore)
-
-    fun getThemeSetting(): LiveData<Boolean> {
-        return pref.getTheme().asLiveData()
-    }
+class SettingViewModel(application: Application) : AndroidViewModel(application) {
+    private val preference = SettingPreference(application)
+    val getTheme = preference.getTheme().asLiveData(Dispatchers.IO)
 
     fun saveThemeSetting(isDarkModeActive: Boolean) {
-        viewModelScope.launch {
-            pref.saveTheme(isDarkModeActive)
+        viewModelScope.launch(Dispatchers.IO) {
+            preference.saveTheme(isDarkModeActive)
         }
     }
 }

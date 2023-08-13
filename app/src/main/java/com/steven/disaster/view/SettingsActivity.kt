@@ -7,9 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import com.steven.disaster.viewmodel.SettingViewModel
 import com.steven.disaster.databinding.ActivitySettingsBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
     private lateinit var settingsBinding: ActivitySettingsBinding
     private val settingViewModel: SettingViewModel by viewModels()
@@ -22,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(settingsBinding.toolbarSetting)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        observeThemeSetting()
+        checkTheme()
         setUpSwitchDarkMode()
     }
 
@@ -35,14 +33,16 @@ class SettingsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun observeThemeSetting() {
-        settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
-            if (isDarkMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                settingsBinding.switchDarkMode.isChecked = true
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                settingsBinding.switchDarkMode.isChecked = false
+    private fun checkTheme() {
+        settingsBinding.apply {
+            settingViewModel.getTheme.observe(this@SettingsActivity) { isDarkMode ->
+                if (isDarkMode) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    switchDarkMode.isChecked = true
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    switchDarkMode.isChecked = false
+                }
             }
         }
     }

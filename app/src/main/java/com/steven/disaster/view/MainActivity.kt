@@ -28,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.chip.Chip
 import com.steven.disaster.viewmodel.MainViewModel
@@ -67,8 +68,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         setContentView(mainBinding.root)
 
-        checkTheme()
-
         createWorkManager()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -79,6 +78,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         this.map = map
         map.uiSettings.isMapToolbarEnabled = false
 
+        checkTheme()
         mainViewModel.getGeometriesItem()
         observeDisasterData()
         observeIsEmptyState()
@@ -115,9 +115,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun checkTheme() {
-        settingViewModel.getThemeSetting().observe(this) { isDarkMode ->
+        settingViewModel.getTheme.observe(this) { isDarkMode ->
             if (isDarkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                map?.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.night_mode_map))
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
