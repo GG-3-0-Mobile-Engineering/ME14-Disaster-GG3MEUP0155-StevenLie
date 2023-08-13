@@ -16,13 +16,13 @@ import retrofit2.Response
 @HiltWorker
 class WaterLevelWorker @AssistedInject constructor(
     @Assisted private val apiService: ApiService,
+    @Assisted private val waterLevelNotification: WaterLevelNotification,
     @Assisted private val context: Context,
     @Assisted private val params: WorkerParameters
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         return try {
             val client = apiService.getTma()
-            val waterLevelNotification = WaterLevelNotification(context)
             var resultStatus: Result = Result.success()
             client.enqueue(object : Callback<TmaResponse> {
                 override fun onResponse(call: Call<TmaResponse>, response: Response<TmaResponse>) {

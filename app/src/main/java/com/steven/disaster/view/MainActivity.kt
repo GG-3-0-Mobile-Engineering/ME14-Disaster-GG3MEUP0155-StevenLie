@@ -39,10 +39,12 @@ import com.steven.disaster.utils.SupportedArea
 import com.steven.disaster.utils.WaterLevelWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var workManager: WorkManager
+    @Inject
+    lateinit var workManager: WorkManager
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var mainBinding: ActivityMainBinding
@@ -67,7 +69,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         checkTheme()
 
-        workManager = WorkManager.getInstance(applicationContext)
         createWorkManager()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
