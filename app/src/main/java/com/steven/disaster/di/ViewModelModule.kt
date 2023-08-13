@@ -1,6 +1,5 @@
 package com.steven.disaster.di
 
-import android.app.Application
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.steven.disaster.data.ApiService
@@ -18,8 +17,7 @@ object ViewModelModule {
 
     @Provides
     @Singleton
-    fun provideMainViewModel(apiService: ApiService, context: Application): MainViewModel =
-        MainViewModel(apiService, context)
+    fun provideMainViewModel(apiService: ApiService): MainViewModel = MainViewModel(apiService)
 
     @Provides
     @Singleton

@@ -1,14 +1,11 @@
 package com.steven.disaster.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.steven.disaster.R
 import com.steven.disaster.data.ApiService
 import com.steven.disaster.data.response.DisasterResponse
 import com.steven.disaster.data.response.GeometriesItem
-import com.steven.disaster.data.response.TmaResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,11 +13,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val apiService: ApiService,
-    private val context: Application
-) :
-    ViewModel() {
+class MainViewModel @Inject constructor(private val apiService: ApiService) : ViewModel() {
     private val _geometriesItem = MutableLiveData<List<GeometriesItem?>?>()
     val geometriesItem: LiveData<List<GeometriesItem?>?> = _geometriesItem
 
@@ -32,9 +25,6 @@ class MainViewModel @Inject constructor(
 
     private val _isEmpty = MutableLiveData<Boolean>()
     val isEmpty: LiveData<Boolean> = _isEmpty
-
-    private val _tmaStatus = MutableLiveData<String?>()
-    val tmaStatus: LiveData<String?> = _tmaStatus
 
     fun getGeometriesItem(locationId: String? = null, disasterType: String? = null) {
         _isLoading.value = true
@@ -60,34 +50,6 @@ class MainViewModel @Inject constructor(
                 _isLoading.value = false
                 _isFailure.value = true
             }
-        })
-    }
-
-    fun getFirstTmaStatus() {
-        val client = apiService.getTma()
-        client.enqueue(object : Callback<TmaResponse> {
-            override fun onResponse(call: Call<TmaResponse>, response: Response<TmaResponse>) {
-                if (response.isSuccessful) {
-                    val responseResult = response.body()?.result?.objects?.output?.geometries
-                    if (responseResult?.isNotEmpty() == true) {
-                        val firstResult = responseResult[0]?.properties
-                        val firstGaugeName = firstResult?.gaugeNameId
-                        if (firstResult?.observations?.isNotEmpty() == true) {
-                            val firstResultStatus = firstResult.observations[0]?.f4
-                            _tmaStatus.value =
-                                context.getString(
-                                    R.string.tma_status,
-                                    firstGaugeName,
-                                    firstResultStatus
-                                )
-                        }
-                    } else {
-                        _tmaStatus.value = null
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<TmaResponse>, t: Throwable) {}
         })
     }
 }

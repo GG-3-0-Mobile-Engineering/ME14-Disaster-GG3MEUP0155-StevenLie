@@ -13,12 +13,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -313,27 +313,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun createWorkManager() {
-        mainViewModel.getFirstTmaStatus()
-        mainViewModel.tmaStatus.observe(this) { tmaStatus ->
-            if (tmaStatus != null) {
-                val request =
-                    PeriodicWorkRequestBuilder<WaterLevelWorker>(3, TimeUnit.HOURS)
-                        .setInputData(workDataOf(WORK_MANAGER_DATA_KEY to tmaStatus))
-                        .setConstraints(Constraints(requiredNetworkType = NetworkType.CONNECTED))
-                        .build()
+        val request =
+            PeriodicWorkRequestBuilder<WaterLevelWorker>(3, TimeUnit.HOURS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, 15, TimeUnit.MINUTES)
+                .setConstraints(Constraints(requiredNetworkType = NetworkType.CONNECTED))
+                .build()
 
-                workManager.enqueueUniquePeriodicWork(
-                    NOTIFICATION_WORK_NAME,
-                    ExistingPeriodicWorkPolicy.KEEP,
-                    request
-                )
-            }
-        }
+        workManager.enqueueUniquePeriodicWork(
+            NOTIFICATION_WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            request
+        )
     }
 
     companion object {
         private const val LOCATION_PERMISSION_CODE = 101
         private const val NOTIFICATION_WORK_NAME = "NOTIFICATION_WORK_NAME"
-        const val WORK_MANAGER_DATA_KEY = "MESSAGE"
     }
 }
