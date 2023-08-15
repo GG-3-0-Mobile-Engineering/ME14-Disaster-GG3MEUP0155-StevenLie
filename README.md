@@ -74,7 +74,7 @@ MAPS_API_KEY=YOUR_API_KEY
 ### Dark Mode
 <img src="image/main-dark.jpg" width=20%> <img src="image/list-dark.jpg" width=20%> <img src="image/searchview-dark.jpg" width=20%> <img src="image/setting-dark.jpg" width=20%> 
 
-## Instument Test
+## Instrument Test
 <img src="image/instrument-test.gif" width="30%">
 
 ## Test Coverage
