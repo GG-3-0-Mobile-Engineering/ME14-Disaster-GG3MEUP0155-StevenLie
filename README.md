@@ -61,9 +61,23 @@ MAPS_API_KEY=YOUR_API_KEY
 | retrofit2 | 2.9.0 |
 | okhttp3 | 4.10.0 |
 | androidx work | 2.8.1 |
-| dagger hilt | 2.44|
+| dagger hilt | 2.44 |
+| junit 4 | 4.13.2 |
+| mockk | 1.13.5 |
+| espresso | 3.5.1 |
+
+## Screenshots
+
+### Light Mode
+<img src="image/main.jpg" width=20%> <img src="image/list.jpg" width=20%> <img src="image/searchview.jpg" width=20%> <img src="image/setting.jpg" width=20%> 
+
+### Dark Mode
+<img src="image/main-dark.jpg" width=20%> <img src="image/list-dark.jpg" width=20%> <img src="image/searchview-dark.jpg" width=20%> <img src="image/setting-dark.jpg" width=20%> 
+
+## Instument Test
+<img src="image/instrument-test.gif" width="30%">
 
 ## APK Installation
 
 You can download the .apk file
-from [github release](https://github.com/GG-3-0-Mobile-Engineering/ME14-Disaster-GG3MEUP0155-StevenLie/releases/tag/v1.0.0)
+from [github release](https://github.com/GG-3-0-Mobile-Engineering/ME14-Disaster-GG3MEUP0155-StevenLie/releases/tag/v1.1.0)
