@@ -77,6 +77,9 @@ MAPS_API_KEY=YOUR_API_KEY
 ## Instument Test
 <img src="image/instrument-test.gif" width="30%">
 
+## Test Coverage
+<img src="image/test_coverage.png" width="30%">
+
 ## APK Installation
 
 You can download the .apk file
